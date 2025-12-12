@@ -33,6 +33,7 @@ using Hangfire.Storage.Monitoring;
 
 namespace Hangfire.PostgreSql
 {
+  [DapperAot]
   public class PostgreSqlMonitoringApi : IMonitoringApi
   {
     private readonly PersistentJobQueueProviderCollection _queueProviders;
@@ -399,9 +400,9 @@ namespace Hangfire.PostgreSql
         GROUP BY "key"
         """;
 
-      Dictionary<string, long> valuesMap = UseConnection(connection => connection.Query<(string Key, long Count)>(query,
+      Dictionary<string, long> valuesMap = UseConnection(connection => connection.Query<KeyCount>(query,
           new { Keys = keyMaps.Keys.ToList() })
-        .ToList()
+        .AsList()
         .ToDictionary(x => x.Key, x => x.Count));
 
       foreach (string key in keyMaps.Keys)
@@ -421,6 +422,8 @@ namespace Hangfire.PostgreSql
 
       return result;
     }
+
+    internal record struct KeyCount(string Key, long Count);
 
     private IPersistentJobQueueMonitoringApi GetQueueApi(string queueName)
     {

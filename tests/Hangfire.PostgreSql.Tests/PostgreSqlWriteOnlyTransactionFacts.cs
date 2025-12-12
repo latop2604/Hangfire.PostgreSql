@@ -103,8 +103,8 @@ namespace Hangfire.PostgreSql.Tests
         VALUES ('{{}}', '[]', NOW()) RETURNING ""id""";
 
       UseConnection(connection => {
-        dynamic jobId = connection.Query(arrangeSql).Single().id.ToString();
-        dynamic anotherJobId = connection.Query(arrangeSql).Single().id.ToString();
+        dynamic jobId = connection.QuerySingle(arrangeSql).id.ToString();
+        dynamic anotherJobId = connection.QuerySingle(arrangeSql).id.ToString();
 
         Mock<IState> state = new();
         state.Setup(x => x.Name).Returns("State");

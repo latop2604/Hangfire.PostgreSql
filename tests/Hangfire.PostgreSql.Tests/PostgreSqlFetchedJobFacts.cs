@@ -113,7 +113,7 @@ namespace Hangfire.PostgreSql.Tests
 
       // Assert
       dynamic record = _storage.UseConnection(null, connection =>
-        connection.Query($@"SELECT * FROM ""{GetSchemaName()}"".""jobqueue""").Single());
+        connection.QuerySingle($@"SELECT * FROM ""{GetSchemaName()}"".""jobqueue"""));
       Assert.Null(record.fetchedat);
     }
 
